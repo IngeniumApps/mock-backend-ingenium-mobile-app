@@ -1,0 +1,118 @@
+{
+  "info": {
+    "name": "Mock Backend API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "🔑 Login",
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Content-Type", "value": "application/json" }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{ \"username\": \"student1\", \"password\": \"123456\" }"
+        },
+        "url": {
+          "raw": "{{base_url}}/auth/authenticate",
+          "host": ["{{base_url}}"],
+          "path": ["auth", "authenticate"]
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "var jsonData = pm.response.json();",
+              "pm.environment.set(\"auth_token\", jsonData.accessToken);",
+              "pm.environment.set(\"refresh_token\", jsonData.refreshToken);",
+              "pm.environment.set(\"expires_at\", jsonData.expiresAt);",
+              "console.log(\"🔐 Access Token gespeichert:\", jsonData.accessToken);",
+              "console.log(\"🔄 Refresh Token gespeichert:\", jsonData.refreshToken);"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ]
+    },
+    {
+      "name": "🔄 Token Refresh",
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Content-Type", "value": "application/json" }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{ \"refreshToken\": \"{{refresh_token}}\" }"
+        },
+        "url": {
+          "raw": "{{base_url}}/auth/refresh",
+          "host": ["{{base_url}}"],
+          "path": ["auth", "refresh"]
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "var jsonData = pm.response.json();",
+              "pm.environment.set(\"auth_token\", jsonData.accessToken);",
+              "pm.environment.set(\"refresh_token\", jsonData.refreshToken);",
+              "pm.environment.set(\"expires_at\", jsonData.expiresAt);",
+              "console.log(\"✅ Token erneuert. Neuer Access Token:\", jsonData.accessToken);",
+              "console.log(\"🔄 Neuer Refresh Token:\", jsonData.refreshToken);"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ]
+    },
+    {
+      "name": "👤 Get User Data",
+      "request": {
+        "method": "GET",
+        "header": [
+          { "key": "Authorization", "value": "Bearer {{auth_token}}" }
+        ],
+        "url": {
+          "raw": "{{base_url}}/user/getUserData/1",
+          "host": ["{{base_url}}"],
+          "path": ["user", "getUserData", "1"]
+        }
+      }
+    },
+    {
+      "name": "📅 Get Calendar Data",
+      "request": {
+        "method": "GET",
+        "header": [
+          { "key": "Authorization", "value": "Bearer {{auth_token}}" }
+        ],
+        "url": {
+          "raw": "{{base_url}}/user/getIcalData/1",
+          "host": ["{{base_url}}"],
+          "path": ["user", "getIcalData", "1"]
+        }
+      }
+    },
+    {
+      "name": "🔗 Get iCal URL",
+      "request": {
+        "method": "GET",
+        "header": [
+          { "key": "Authorization", "value": "Bearer {{auth_token}}" }
+        ],
+        "url": {
+          "raw": "{{base_url}}/user/getIcalUrl/1",
+          "host": ["{{base_url}}"],
+          "path": ["user", "getIcalUrl", "1"]
+        }
+      }
+    }
+  ]
+}

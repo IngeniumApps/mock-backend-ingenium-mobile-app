@@ -6,7 +6,7 @@
     "strict": true,
     "esModuleInterop": true,
     "outDir": "./dist",
-    "skipLibCheck": true
+    "skipLibCheck": true,
   },
   "include": ["server.ts", "json-server.d.ts"]
 }
