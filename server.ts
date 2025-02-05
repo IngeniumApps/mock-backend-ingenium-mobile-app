@@ -182,7 +182,7 @@ app.get("/ingeapp/api/v1/user/getIcalUrl/:userID", authenticate, (req: Request, 
 });
 
 // 🔹 **Starte den Server**
-const PORT = 3001;
+const PORT = process.env.PORT || 3001;
 app.listen(PORT, () => {
   console.log(`✅ Mock-Server läuft auf http://localhost:${PORT}`);
 });
